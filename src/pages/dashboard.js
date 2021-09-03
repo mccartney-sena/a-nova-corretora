@@ -1,4 +1,17 @@
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { signOut, useSession } from 'next-auth/client'
+
 export default function Dashboard() {
+  const [session] = useSession()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (!session) {
+      router.push('/')
+    }
+  }, [session])
+
   return (
     <div>
       <nav className="bg-gray-800">
@@ -117,12 +130,12 @@ export default function Dashboard() {
                     {/* <!-- Active: "bg-gray-100", Not Active: "" --> */}
                     <a
                       href={() => false}
-                      className="block px-4 py-2 text-sm text-gray-700"
+                      className="block px-4 py-2 text-sm text-gray-700 break-words"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-0"
                     >
-                      Your Profile
+                      {session?.user.email}
                     </a>
 
                     <a
@@ -135,15 +148,15 @@ export default function Dashboard() {
                       Settings
                     </a>
 
-                    <a
-                      href={() => false}
+                    <button
+                      onClick={() => signOut()}
                       className="block px-4 py-2 text-sm text-gray-700"
                       role="menuitem"
                       tabIndex="-1"
                       id="user-menu-item-2"
                     >
                       Sign out
-                    </a>
+                    </button>
                   </div>
                 </div>
               </div>
